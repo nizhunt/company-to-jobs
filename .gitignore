@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+# Ignore discovery and todo folders
+discovery/
+todo/
+to-do/
+
+# Ignore ephemeral CSV outputs (keep diff tracked)
+discovery/*.csv
+Sheet 2-Table 1.csv
+
+# Local artifacts
+*.numbers

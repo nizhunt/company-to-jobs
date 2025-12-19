@@ -18,6 +18,9 @@ HTTP_HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) A
 N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL")
 N8N_WEBHOOK_TOKEN = os.getenv("N8N_WEBHOOK_TOKEN")
 
+def get_run_date():
+    return time.strftime("%Y-%m-%d")
+
 def post_diff_json(df):
     if not (N8N_WEBHOOK_URL and N8N_WEBHOOK_TOKEN):
         print("Webhook not configured; skipping")
@@ -807,6 +810,7 @@ def fetch_polymer_jobs(slug, max_jobs=10):
 
 def main():
     start = time.perf_counter()
+    run_date = get_run_date()
     df = pd.read_csv(INPUT_CSV)
     only_companies = os.getenv("ONLY_COMPANIES")
     only_ats = os.getenv("ONLY_ATS")
@@ -1103,6 +1107,7 @@ def main():
                 "job_contact_email": None,
                 "job_url": job.get("job_url"),
                 "source_raw": job.get("source_raw"),
+                "date": run_date,
             })
             total_jobs += 1
     out_cols = [
@@ -1118,8 +1123,10 @@ def main():
         "job_contact_email",
         "job_url",
         "source_raw",
+        "date",
     ]
     out_df = pd.DataFrame(all_rows)
+    out_df["date"] = run_date
     if not out_df.empty:
         out_df["key"] = (
             out_df["company_name"].fillna("").str.lower()

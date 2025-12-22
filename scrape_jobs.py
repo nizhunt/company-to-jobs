@@ -35,6 +35,20 @@ def post_diff_json(df):
         print(f"Webhook error: {e}")
         return None
 
+def aggregate_for_webhook(df):
+    if df is None or df.empty:
+        return df
+    group_cols = ["company_name", "job_title"]
+    other_cols = [c for c in df.columns if c not in group_cols]
+    def _join_unique(s):
+        s = s.dropna().astype(str).str.strip()
+        s = s[s.ne("")]
+        if s.empty:
+            return None
+        return "; ".join(pd.unique(s))
+    grouped = df.groupby(group_cols, dropna=False).agg({c: _join_unique for c in other_cols}).reset_index()
+    return grouped
+
 def normalize_domain(url):
     if not isinstance(url, str) or not url.strip():
         return None
@@ -1164,7 +1178,7 @@ def main():
     updated_base = updated_base.drop(columns=["key"])
     diff_df.to_csv(OUTPUT_CSV, index=False)
     updated_base.to_csv(BASE_CSV, index=False)
-    status = post_diff_json(diff_df)
+    status = post_diff_json(aggregate_for_webhook(diff_df))
     if status is not None:
         print(f"Webhook status: {status}")
     zero_df = pd.DataFrame(zero_rows, columns=["company", "ats", "scrapped_link"])

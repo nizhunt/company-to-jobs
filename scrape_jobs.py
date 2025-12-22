@@ -8,10 +8,10 @@ import xml.etree.ElementTree as ET
 import os
 import time
 
-INPUT_CSV = os.getenv("INPUT_CSV", "Copy of Calyptus Account Information - 2024.csv")
-BASE_CSV = os.getenv("BASE_CSV", "calyptus_jobs_scraped.csv")
-OUTPUT_CSV = os.getenv("OUTPUT_CSV", "calyptus_jobs_diff.csv")
-ZERO_CSV = os.getenv("ZERO_CSV", "calyptus_jobs_zero.csv")
+INPUT_CSV = os.getenv("INPUT_CSV", "Account Information - 2024.csv")
+BASE_CSV = os.getenv("BASE_CSV", "jobs_scraped.csv")
+OUTPUT_CSV = os.getenv("OUTPUT_CSV", "jobs_diff.csv")
+ZERO_CSV = os.getenv("ZERO_CSV", "jobs_zero.csv")
 MAX_JOBS_PER_COMPANY = int(os.getenv("MAX_JOBS_PER_COMPANY", "50"))
 MAX_TOTAL_JOBS = 1000
 HTTP_HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"}

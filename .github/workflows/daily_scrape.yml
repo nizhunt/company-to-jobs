@@ -21,7 +21,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run scraper
         env:
-          INPUT_CSV: "Copy of Calyptus Account Information - 2024.csv"
+          INPUT_CSV: "Account Information - 2024.csv"
           N8N_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
           N8N_WEBHOOK_TOKEN: ${{ secrets.N8N_WEBHOOK_TOKEN }}
           MAX_JOBS_PER_COMPANY: "50"
@@ -30,12 +30,12 @@ jobs:
       - name: Upload diff artifact
         uses: actions/upload-artifact@v4
         with:
-          name: calyptus_jobs_diff
-          path: calyptus_jobs_diff.csv
+          name: jobs_diff
+          path: jobs_diff.csv
       - name: Commit updated base, diff, and zero CSVs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add calyptus_jobs_scraped.csv calyptus_jobs_diff.csv calyptus_jobs_zero.csv
+          git add jobs_scraped.csv jobs_diff.csv jobs_zero.csv
           git diff --cached --quiet || git commit -m "daily scrape: update base CSV"
           git push
